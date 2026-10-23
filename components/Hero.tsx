@@ -50,7 +50,7 @@ export default function Hero() {
         className="relative z-10 mb-8 flex flex-col items-center gap-2 text-white/90 transition-opacity hover:opacity-60"
       >
         <span className="text-xs tracking-[0.2em] uppercase">
-          Explore
+          SCROLL
         </span>
         <span className="h-8 w-px bg-white/80" />
       </a>

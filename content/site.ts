@@ -11,7 +11,7 @@ export const site = {
   title: 'Red Door | Official Website',
   description:
     'Official website of Red Door, an indie and alternative rock band from Mississippi. Music, tour dates, merch, and booking.',
-  tagline: 'Indie Rock — Mississippi',
+  tagline: 'Starkville, Mississippi',
 }
 
 export const nav = [
@@ -106,8 +106,8 @@ export const merch = {
 
 export const about = {
   bio: [
-    'Red Door is an indie rock band based in Mississippi, blending alternative rock influences with a set built around guitar driven songs and energetic live performances.',
-    'The band plays venues, college events, and private shows throughout the Southeast, bringing a mix of original music and familiar favorites to every stage.',
+    'Red Door is a four piece rock band from Starkville, Mississippi, made up of Michael, Patrick, Nick, and Keygan. Drawing from the rock music that shaped them, the band brings together guitar driven songs, familiar favorites, and an energetic live sound.',
+    'From college events and private parties to venues throughout the Southeast, Red Door plays the songs people know and loves putting on a good show.',
   ],
   photo: '/images/band-about.JPG',
   members: [
