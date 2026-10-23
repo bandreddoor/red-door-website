@@ -72,7 +72,7 @@ export const about = {
     'Red Door is an indie rock band based in Mississippi, blending alternative rock influences with a set built around guitar driven songs and energetic live performances.',
     'The band plays venues, college events, and private shows throughout the Southeast, bringing a mix of original music and familiar favorites to every stage.',
   ],
-  photo: '/images/band-about.jpg',
+  photo: '/images/band-about.JPG',
   members: [
     { name: 'Michael', role: 'Lead Vocals & Guitar' }, { name: 'Patrick', role: 'Guitar' },
     { name: 'Nick', role: 'Bass' }, { name: 'Keygan', role: 'Drums' },
