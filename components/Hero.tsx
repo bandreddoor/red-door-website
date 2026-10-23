@@ -1,4 +1,5 @@
 
+import Image from 'next/image'
 import { site } from '@/content/site'
 
 export default function Hero() {
@@ -10,11 +11,11 @@ export default function Hero() {
       {/* Full-screen band photograph */}
       <div
         aria-hidden="true"
-        className="absolute inset-0"
+        className="absolute inset-0 bg-cover bg-center md:bg-cover"
         style={{
           backgroundImage: "url('/images/band-photo.jpg')",
-          backgroundSize: '110%',
-          backgroundPosition: '65% 45%',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center 35%',
           backgroundRepeat: 'no-repeat',
         }}
       />
@@ -22,6 +23,18 @@ export default function Hero() {
       {/* Dark overlays */}
       <div className="absolute inset-0 bg-black/20" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/10" />
+
+      {/* Centered Red Door logo */}
+      <div className="absolute left-1/2 top-[7%] z-10 -translate-x-1/2 md:top-[0%]">
+        <Image
+          src="/assets/logos/logo-sticker.png"
+          alt="Red Door"
+          width={280}
+          height={280}
+          className="logo-reveal h-auto w-[75vw] max-w-[420px] object-contain md:w-[34vw] md:max-w-[500px]"
+          priority
+        />
+      </div>
 
       {/* Tagline */}
       <div className="relative z-10 mb-16 px-6 text-center">
