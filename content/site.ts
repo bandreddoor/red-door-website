@@ -57,10 +57,7 @@ export type Show = {
   placeholder?: boolean
 }
 
-export const shows: Show[] = [
-  
-  
-]
+export const shows: Show[] = []
 
 export type Product = {
   name: string
@@ -73,27 +70,51 @@ export type Product = {
   placeholder?: boolean
 }
 
-const ph = (name: string, category: string): Product => ({
-  name,
-  category,
-  price: '',
-  sizes: [],
-  image: '',
-  url: '',
-  placeholder: true,
-  description: 'Placeholder product. Details coming soon.',
-})
-
 export const merch = {
-  note: 'Official merch is on the way. Products below are placeholders.',
+  note: 'Official Red Door merchandise.',
+  href: '/merch',
   products: [
-    ph('T-Shirt', 'T-Shirts'),
-    ph('Hoodie', 'Hoodies'),
-    ph('Hat', 'Hats'),
-    ph('Beanie', 'Beanies'),
-    ph('Stickers', 'Stickers'),
-    ph('Accessory', 'Accessories'),
-  ],
+    {
+      name: 'Red Door Hoodie',
+      category: 'Hoodies',
+      price: '',
+      sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+      description: 'Black hoodie with cream Red Door logo detailing.',
+      image: '/images/merch/red-door-hoodie-front.png',
+      url: '/merch',
+      placeholder: false,
+    },
+    {
+      name: 'Red Door T-Shirt',
+      category: 'T-Shirts',
+      price: '',
+      sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+      description: 'Official Red Door T-Shirt.',
+      image: '',
+      url: '/merch',
+      placeholder: true,
+    },
+    {
+      name: 'Red Door Crewneck',
+      category: 'Crewnecks',
+      price: '',
+      sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+      description: 'Official Red Door Crewneck.',
+      image: '',
+      url: '/merch',
+      placeholder: true,
+    },
+    {
+      name: 'Red Door Sticker Pack',
+      category: 'Stickers',
+      price: '',
+      sizes: [],
+      description: 'Official Red Door stickers.',
+      image: '',
+      url: '/merch',
+      placeholder: true,
+    },
+  ] satisfies Product[],
 }
 
 export const about = {

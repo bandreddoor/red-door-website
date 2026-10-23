@@ -160,3 +160,34 @@
   }
 }
 
+.merch-marquee {
+  overflow: hidden;
+  width: 100%;
+}
+
+.merch-marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 1.5rem;
+  animation: merch-scroll 32s linear infinite;
+}
+
+.merch-marquee:hover .merch-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes merch-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .merch-marquee-track {
+    animation: none;
+  }
+}
+

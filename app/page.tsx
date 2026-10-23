@@ -16,8 +16,8 @@ export default function Page() {
     <>
       <Nav />
       <main id="main">
-        <Hero /><Music /><Shows /><Booking /><LiveGallery /><Merch /><About /><Contact />
-      </main>
+  <Hero /><Music /><Merch /><Shows /><Booking /><LiveGallery /><About /><Contact />
+</main>
       <Footer />
     </>
   )
