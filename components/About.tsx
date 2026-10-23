@@ -1,4 +1,3 @@
-
 'use client'
 
 import Image from 'next/image'
@@ -29,7 +28,6 @@ function Member({ name, role, index }: {
     )
 
     observer.observe(element)
-
     return () => observer.disconnect()
   }, [])
 
@@ -42,7 +40,6 @@ function Member({ name, role, index }: {
       <p className="font-display text-4xl font-black uppercase leading-none tracking-tighter md:text-5xl">
         {name}
       </p>
-
       <p className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-ink/55">
         {role}
       </p>
@@ -67,25 +64,15 @@ export default function About() {
                 Band photo placeholder
               </span>}
         </div>
-
         <div className="md:col-span-7">
           <div className="max-w-xl space-y-5 text-lg leading-relaxed md:text-xl">
-            {about.bio.map((p) => (
-              <p key={p}>{p}</p>
-            ))}
+            {about.bio.map((p) => <p key={p}>{p}</p>)}
           </div>
-
           <div className="mt-12">
             <p className="eyebrow mb-5 text-red">The Band</p>
-
             <ul>
               {about.members.map((m, index) => (
-                <Member
-                  key={m.name}
-                  name={m.name}
-                  role={m.role}
-                  index={index}
-                />
+                <Member key={m.name} name={m.name} role={m.role} index={index} />
               ))}
             </ul>
           </div>

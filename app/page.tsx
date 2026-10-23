@@ -6,6 +6,8 @@ import Merch from '@/components/Merch'
 import About from '@/components/About'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
+import Booking from '@/components/Booking'
+import LiveGallery from '@/components/LiveGallery'
 
 export const revalidate = 86400 // rebuild daily so past shows drop off the list
 
@@ -14,7 +16,7 @@ export default function Page() {
     <>
       <Nav />
       <main id="main">
-        <Hero /><Music /><Shows /><Merch /><About /><Contact />
+        <Hero /><Music /><Shows /><Booking /><LiveGallery /><Merch /><About /><Contact />
       </main>
       <Footer />
     </>

@@ -2,7 +2,7 @@
 import Section from './Section'
 import Reveal from './Reveal'
 import ExtLink from './ExtLink'
-import { shows, contact } from '@/content/site'
+import { shows } from '@/content/site'
 
 const parse = (d: string) => {
   const [y, m, day] = d.split('-').map(Number)
@@ -106,37 +106,6 @@ export default function Shows() {
         </Reveal>
       )}
 
-      {/* Booking inquiry */}
-      <Reveal>
-        <div className="mt-20 flex flex-col gap-6 md:mt-28 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="eyebrow mb-4 text-red">
-              Bring Red Door to your event
-            </p>
-
-            <h3 className="font-display text-4xl font-black uppercase leading-none tracking-tighter md:text-6xl">
-              Want to book
-              <br />
-              Red Door?
-            </h3>
-
-            <p className="mt-5 max-w-lg text-base leading-relaxed text-ink/70 md:text-lg">
-              College events, private parties, venues, and
-              festivals. Get in touch about bringing us to your
-              next event.
-            </p>
-          </div>
-
-          <a
-            href={`mailto:${contact.booking}?subject=${encodeURIComponent(
-              contact.bookingSubject
-            )}`}
-            className="btn w-fit shrink-0 text-ink"
-          >
-            Booking Inquiries ↗
-          </a>
-        </div>
-      </Reveal>
     </Section>
   )
 }
