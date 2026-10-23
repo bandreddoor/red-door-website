@@ -81,7 +81,7 @@ export const merch = {
       sizes: ['S', 'M', 'L', 'XL', 'XXL'],
       description: 'Black hoodie with cream Red Door logo detailing.',
       image: '/images/merch/red-door-hoodie-front.png',
-      url: '/merch',
+      url: '/merch/red-door-hoodie',
       placeholder: false,
     },
     {

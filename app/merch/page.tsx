@@ -31,8 +31,12 @@ export default function MerchPage() {
 
         <div className="grid grid-cols-2 gap-x-4 gap-y-12 md:grid-cols-3 md:gap-x-6">
           {products.map((product) => (
-            <div key={product.name}>
-              <div className="group relative aspect-[4/5] overflow-hidden transition-transform duration-500 ease-out hover:-rotate-2 hover:scale-[1.04]">
+            <Link
+              key={product.name}
+              href={product.url}
+              className="group block"
+            >
+              <div className="relative aspect-[4/5] overflow-hidden transition-transform duration-500 ease-out group-hover:-rotate-2 group-hover:scale-[1.04]">
                 {product.image ? (
                   <>
                     <Image
@@ -69,14 +73,14 @@ export default function MerchPage() {
                 )}
               </div>
 
-              <h2 className="mt-4 font-display text-xl font-extrabold uppercase tracking-tight md:text-2xl">
+              <h2 className="mt-4 font-display text-xl font-extrabold uppercase tracking-tight transition-colors group-hover:text-red md:text-2xl">
                 {product.name}
               </h2>
 
               <p className="eyebrow mt-1 text-ink/50">
-                Coming Soon
+                {product.placeholder ? 'Coming Soon' : product.price || 'Coming Soon'}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
