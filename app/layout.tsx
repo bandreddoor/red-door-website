@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Archivo, Inter } from 'next/font/google'
 import './globals.css'
 import { site, social, about } from '@/content/site'
+import { Analytics } from '@vercel/analytics/next'
 
 const display = Archivo({ subsets: ['latin'], weight: ['800', '900'], variable: '--font-display', display: 'swap' })
 const body = Inter({ subsets: ['latin'], variable: '--font-body', display: 'swap' })
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-ink focus:px-4 focus:py-2 focus:text-cream">Skip to content</a>
         {children}
+        <Analytics />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </body>
     </html>
