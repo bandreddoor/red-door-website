@@ -1,0 +1,13 @@
+import type { ReactNode } from 'react'
+import Reveal from './Reveal'
+
+export default function Section({ id, title, children, className = '' }: { id: string; title: string; children: ReactNode; className?: string }) {
+  return (
+    <section id={id} aria-labelledby={`${id}-h`} className={`px-5 py-24 md:px-10 md:py-36 ${className}`}>
+      <div className="mx-auto max-w-[1600px]">
+        <Reveal><h2 id={`${id}-h`} className="h-section">{title}</h2></Reveal>
+        <div className="mt-12 md:mt-20">{children}</div>
+      </div>
+    </section>
+  )
+}
