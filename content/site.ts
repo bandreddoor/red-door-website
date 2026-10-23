@@ -58,15 +58,7 @@ export type Show = {
 }
 
 export const shows: Show[] = [
-  {
-    date: '2027-01-16',
-    city: 'Auburn',
-    state: 'AL',
-    venue: 'Auburn Delta Chi',
-    ticketUrl: '',
-    eventType: 'private',
-    placeholder: false,
-  },
+  
   
 ]
 
@@ -106,7 +98,7 @@ export const merch = {
 
 export const about = {
   bio: [
-    'Red Door is a four-piece rock band from Starkville, Mississippi, made up of Michael, Patrick, Nick, and Keygan. Their set draws from the rock music they grew up listening to, built around guitar-driven songs and familiar favorites.',
+    'Red Door is a four piece rock band from Starkville, Mississippi, made up of Michael, Patrick, Nick, and Keygan. Their set draws from the rock music they grew up listening to, built around guitar driven songs and familiar favorites.',
     'The band performs at venues, college events, and private shows throughout the Southeast.',
   ],
   photo: '/images/band-about.JPG',

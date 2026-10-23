@@ -3,7 +3,7 @@ import Reveal from './Reveal'
 import ExtLink from './ExtLink'
 import { contact } from '@/content/site'
 
-const eventTypes = ['College events', 'Private parties', 'Venues', 'Festivals']
+const eventTypes = ['College events & Greek Life', 'Private Parties', 'Bars & Live Music Venues']
 
 export default function Booking() {
   const href = contact.booking

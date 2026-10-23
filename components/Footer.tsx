@@ -27,7 +27,7 @@ export default function Footer() {
       </div>
 
       <div className="eyebrow mx-auto mt-12 flex max-w-[1600px] flex-col gap-2 border-t border-cream/25 pt-6 text-cream/70 md:flex-row md:justify-between">
-        <p>© {new Date().getFullYear()} Red Door. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} Red Door Band LLC. All rights reserved.</p>
         <p>Starkville, Mississippi</p>
       </div>
     </footer>
