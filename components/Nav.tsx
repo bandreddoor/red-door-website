@@ -48,7 +48,7 @@ export default function Nav() {
 
           {/* Desktop navigation */}
           <ul className="hidden gap-9 md:flex">
-            {nav?.map((n) => (
+            {(nav ?? []).map((n) => (
               <li key={n.href}>
                 <a
                   href={n.href}
