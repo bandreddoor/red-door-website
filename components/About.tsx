@@ -9,7 +9,7 @@ export default function About() {
       <Reveal className="grid gap-12 md:grid-cols-12 md:gap-16">
         <div className="relative aspect-[4/5] border border-ink/15 bg-ink/[0.04] md:col-span-5">
           {about.photo
-            ? <Image src="/images/band-about.jpg" alt="Red Door" fill sizes="(min-width: 768px) 40vw, 100vw" className="object-cover" />
+            ? <Image src={about.photo} alt="Red Door" fill sizes="(min-width: 768px) 40vw, 100vw" className="object-cover" />
             : <span className="eyebrow absolute inset-0 grid place-items-center text-ink/50">Band photo placeholder</span>}
         </div>
         <div className="md:col-span-7">
