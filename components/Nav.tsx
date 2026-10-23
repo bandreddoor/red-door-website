@@ -3,10 +3,12 @@
 
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { nav, logos } from '@/content/site'
+import { nav } from '@/content/site'
 
 export default function Nav() {
   const [open, setOpen] = useState(false)
+  const [visible, setVisible] = useState(false)
+
   const navigation = (nav ?? []).filter(
     (item): item is NonNullable<typeof item> => item != null
   )
@@ -24,6 +26,15 @@ export default function Nav() {
       window.removeEventListener('keydown', esc)
       document.body.style.overflow = ''
     }
+  }, [open])
+
+  useEffect(() => {
+    if (open) {
+      const frame = requestAnimationFrame(() => setVisible(true))
+      return () => cancelAnimationFrame(frame)
+    }
+
+    setVisible(false)
   }, [open])
 
   return (
@@ -76,26 +87,79 @@ export default function Nav() {
       </header>
 
       {/* Mobile menu */}
-      {open && (
+      <div
+        id="menu"
+        aria-hidden={!open}
+        className={`fixed inset-0 z-40 flex flex-col bg-cream px-5 pb-8 pt-28 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:hidden ${
+          visible ? 'translate-x-0' : 'translate-x-full'
+        } ${open ? 'pointer-events-auto' : 'pointer-events-none'}`}
+      >
+        {/* Navigation links */}
+        <ul>
+          {navigation.map((n, index) => (
+            <li
+              key={n.href}
+              className="transition-all duration-500 ease-out"
+              style={{
+                opacity: visible ? 1 : 0,
+                transform: visible ? 'translateY(0)' : 'translateY(20px)',
+                transitionDelay: visible ? `${index * 100 + 150}ms` : '0ms',
+              }}
+            >
+              <a
+                href={n.href}
+                tabIndex={open ? 0 : -1}
+                onClick={() => setOpen(false)}
+                className="block py-1 font-display text-6xl font-black uppercase leading-none tracking-tighter transition-colors hover:text-red"
+              >
+                {n.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        {/* Bottom branding */}
         <div
-          id="menu"
-          className="fixed inset-0 z-40 bg-cream px-5 pt-28 md:hidden"
+          className="mt-auto flex flex-col items-center text-center transition-all duration-700"
+          style={{
+            opacity: visible ? 1 : 0,
+            transform: visible ? 'translateY(0)' : 'translateY(16px)',
+            transitionDelay: visible ? '550ms' : '0ms',
+          }}
         >
-          <ul>
-            {navigation.map((n) => (
-              <li key={n.href}>
-                <a
-                  href={n.href}
-                  onClick={() => setOpen(false)}
-                  className="block py-1 font-display text-6xl font-black uppercase leading-none tracking-tighter hover:text-red"
-                >
-                  {n.label}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <Image
+            src="/assets/logos/logo-sticker.png"
+            alt="Red Door"
+            width={280}
+            height={280}
+            className="h-auto w-32 object-contain"
+          />
+
+          <p className="mt-3 text-xs font-semibold uppercase tracking-[0.2em] text-red">
+            STARKVILLE, MS
+          </p>
+
+          <div className="mt-6 flex items-center gap-8">
+            <a
+              href="https://www.instagram.com/reddoorband/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="eyebrow transition-colors hover:text-red"
+            >
+              Instagram
+            </a>
+
+            <a
+              href="https://www.tiktok.com/@reddoorband"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="eyebrow transition-colors hover:text-red"
+            >
+              TikTok
+            </a>
+          </div>
         </div>
-      )}
+      </div>
     </>
   )
 }
