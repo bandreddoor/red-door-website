@@ -7,6 +7,9 @@ import { nav, logos } from '@/content/site'
 
 export default function Nav() {
   const [open, setOpen] = useState(false)
+  const navigation = (nav ?? []).filter(
+    (item): item is NonNullable<typeof item> => item != null
+  )
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
@@ -48,7 +51,7 @@ export default function Nav() {
 
           {/* Desktop navigation */}
           <ul className="hidden gap-9 md:flex">
-            {(nav ?? []).map((n) => (
+            {navigation.map((n) => (
               <li key={n.href}>
                 <a
                   href={n.href}
@@ -79,7 +82,7 @@ export default function Nav() {
           className="fixed inset-0 z-40 bg-cream px-5 pt-28 md:hidden"
         >
           <ul>
-            {nav.map((n) => (
+            {navigation.map((n) => (
               <li key={n.href}>
                 <a
                   href={n.href}
