@@ -3,8 +3,9 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { merch } from '@/content/site'
+import { useCart } from '@/components/CartProvider'
 
 type ShopifyProduct = {
   title: string
@@ -50,13 +51,17 @@ export default function HoodieProductClient({ shopifyProduct }: Props) {
     (item) => item.name === 'Red Door Hoodie'
   )
 
+  const { addItem } = useCart()
+
   const [selectedImage, setSelectedImage] = useState(0)
   const [selectedSize, setSelectedSize] = useState('')
   const [quantity, setQuantity] = useState(1)
   const [showSizeGuide, setShowSizeGuide] = useState(false)
   const [addingToCart, setAddingToCart] = useState(false)
-  const [cartCheckoutUrl, setCartCheckoutUrl] = useState('')
   const [cartError, setCartError] = useState('')
+  const [addedToCart, setAddedToCart] = useState(false)
+
+  const touchStartX = useRef<number | null>(null)
 
   if (!product) {
     return <main className="min-h-screen bg-cream p-10">Product not found.</main>
@@ -79,11 +84,9 @@ export default function HoodieProductClient({ shopifyProduct }: Props) {
     : ''
 
   const displayedPrice = livePrice || product.price || 'Price coming soon'
-  const displayedDescription =
-    shopifyProduct?.description || product.description
 
-  const findVariantBySize = (size: string) => {
-    return shopifyProduct?.variants.nodes.find((variant) => {
+  const findVariantBySize = (size: string) =>
+    shopifyProduct?.variants.nodes.find((variant) => {
       const sizeOption = variant.selectedOptions.find(
         (option) => option.name.toLowerCase() === 'size'
       )
@@ -93,7 +96,6 @@ export default function HoodieProductClient({ shopifyProduct }: Props) {
         normalizeSize(sizeOption.value) === normalizeSize(size)
       )
     })
-  }
 
   const selectedVariant = findVariantBySize(selectedSize)
 
@@ -101,12 +103,30 @@ export default function HoodieProductClient({ shopifyProduct }: Props) {
     Boolean(shopifyProduct?.availableForSale) &&
     Boolean(selectedVariant?.availableForSale)
 
-  async function handleCartAction() {
-    if (cartCheckoutUrl) {
-      window.location.assign(cartCheckoutUrl)
-      return
+  const changeImage = (direction: number) => {
+    setSelectedImage((current) =>
+      (current + direction + images.length) % images.length
+    )
+  }
+
+  const handleTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
+    touchStartX.current = event.touches[0].clientX
+  }
+
+  const handleTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
+    if (touchStartX.current === null) return
+
+    const touchEndX = event.changedTouches[0].clientX
+    const difference = touchStartX.current - touchEndX
+
+    if (Math.abs(difference) > 50) {
+      changeImage(difference > 0 ? 1 : -1)
     }
 
+    touchStartX.current = null
+  }
+
+  async function handleCartAction() {
     if (!shopifyProduct || !selectedVariant) {
       setCartError('Please select an available size.')
       return
@@ -119,28 +139,11 @@ export default function HoodieProductClient({ shopifyProduct }: Props) {
 
     setAddingToCart(true)
     setCartError('')
+    setAddedToCart(false)
 
     try {
-      const response = await fetch('/api/cart', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          variantId: selectedVariant.id,
-          quantity,
-          cartId: localStorage.getItem('red-door-cart-id'),
-        }),
-      })
-
-      const result = await response.json()
-
-      if (!response.ok) {
-        throw new Error(result.error || 'Unable to add to cart.')
-      }
-
-      localStorage.setItem('red-door-cart-id', result.cartId)
-      setCartCheckoutUrl(result.checkoutUrl)
+      await addItem(selectedVariant.id, quantity)
+      setAddedToCart(true)
     } catch (error) {
       setCartError(
         error instanceof Error
@@ -154,93 +157,168 @@ export default function HoodieProductClient({ shopifyProduct }: Props) {
 
   return (
     <main className="min-h-screen bg-cream text-ink">
-      <div className="mx-auto max-w-7xl px-5 py-8 md:px-10 md:py-12">
-        <div className="mb-8 flex items-center justify-between border-b border-ink/20 pb-5">
-          <Link href="/merch" className="eyebrow text-ink/60 hover:text-red">
+      <style jsx>{`
+        @keyframes hoodieImageEnter {
+          from {
+            opacity: 0;
+            transform: translateX(14px) scale(0.985);
+            filter: blur(3px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            filter: blur(0);
+          }
+        }
+
+        .hoodie-image-enter {
+          animation: hoodieImageEnter 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .hoodie-image-enter {
+            animation: none;
+          }
+        }
+      `}</style>
+
+      <div className="mx-auto max-w-[1600px] px-5 pb-20 pt-6 md:px-10 md:pb-28 md:pt-10">
+
+        {/* Top Navigation */}
+        <div className="mb-8 grid grid-cols-2 items-start border-b border-ink/20 pb-5 md:mb-12">
+          <Link
+            href="/merch"
+            className="eyebrow justify-self-start text-ink/60 transition-colors hover:text-red"
+          >
             ← Back to Merch
           </Link>
-          <Link href="/" className="eyebrow text-ink/60 hover:text-red">
-            Red Door
-          </Link>
+
+          <span className="eyebrow justify-self-end text-right text-ink/50">
+            Red Door / Official Merchandise
+          </span>
         </div>
 
-        <div className="grid gap-10 md:grid-cols-2 md:gap-16">
-          <div>
-            <div className="relative aspect-[4/5]">
-              <Image
-                src={images[selectedImage].src}
-                alt={images[selectedImage].alt}
-                fill
-                priority
-                sizes="(min-width: 768px) 50vw, 100vw"
-                className="object-contain"
-              />
+        <div className="grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:gap-16">
+
+          {/* Product Images */}
+          <div className="lg:sticky lg:top-8 lg:self-start">
+            <div
+              className="relative mx-auto flex min-h-[360px] max-w-[560px] items-center justify-center overflow-hidden bg-ink/[0.025] touch-pan-y"
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            >
+              <div
+                key={selectedImage}
+                className="hoodie-image-enter relative aspect-[4/5] w-full max-w-[480px]"
+              >
+                <Image
+                  src={images[selectedImage].src}
+                  alt={images[selectedImage].alt}
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 45vw, 100vw"
+                  className="object-contain p-6 md:p-10"
+                  draggable={false}
+                />
+              </div>
+
+              <button
+                type="button"
+                onClick={() => changeImage(-1)}
+                aria-label="View previous product image"
+                className="absolute left-3 top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-ink/15 bg-cream/90 text-ink transition-colors hover:border-red hover:bg-red hover:text-cream md:left-5 md:h-12 md:w-12"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden="true">
+                  <path d="M15 18 9 12l6-6" />
+                </svg>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => changeImage(1)}
+                aria-label="View next product image"
+                className="absolute right-3 top-1/2 z-10 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-ink/15 bg-cream/90 text-ink transition-colors hover:border-red hover:bg-red hover:text-cream md:right-5 md:h-12 md:w-12"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden="true">
+                  <path d="m9 18 6-6-6-6" />
+                </svg>
+              </button>
+
+              <span className="eyebrow absolute bottom-5 left-5 text-ink/40">
+                Red Door / 001
+              </span>
+
+              <span className="eyebrow absolute bottom-5 right-5 text-ink/40">
+                {images[selectedImage].label} View
+              </span>
             </div>
 
-            <div className="mt-4 grid grid-cols-2 gap-3">
+            <div className="mt-5 flex items-center justify-center gap-3">
               {images.map((image, index) => (
                 <button
                   key={image.label}
                   type="button"
                   onClick={() => setSelectedImage(index)}
-                  className={`relative aspect-[4/5] border ${
-                    selectedImage === index
-                      ? 'border-red'
-                      : 'border-ink/20'
-                  }`}
-                  aria-label={`View hoodie ${image.label.toLowerCase()}`}
+                  aria-label={`View ${image.label.toLowerCase()} image`}
                   aria-pressed={selectedImage === index}
-                >
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    fill
-                    sizes="25vw"
-                    className="object-contain"
-                  />
-                  <span className="absolute bottom-2 left-2 bg-cream/90 px-2 py-1 text-xs uppercase tracking-wider">
-                    {image.label}
-                  </span>
-                </button>
+                  className={`h-1 transition-all duration-300 ${
+                    selectedImage === index
+                      ? 'w-10 bg-red'
+                      : 'w-5 bg-ink/20 hover:bg-ink/50'
+                  }`}
+                />
               ))}
+
+              <span className="eyebrow ml-2 text-ink/40">
+                0{selectedImage + 1} / 0{images.length}
+              </span>
             </div>
           </div>
 
-          <div className="pt-2 md:pt-8">
-            <p className="eyebrow mb-4 text-red">
-              Official Red Door Merch
+          {/* Product Information */}
+          <div className="lg:pt-8">
+            <p className="eyebrow mb-5 text-red">
+              Official Red Door Merchandise
             </p>
 
-            <h1 className="font-display text-5xl font-black uppercase leading-[0.9] tracking-tight md:text-7xl">
+            <h1 className="font-display text-6xl font-black uppercase leading-[0.86] tracking-tight md:text-7xl lg:text-[6.5rem]">
               Red Door
               <br />
               Hoodie
             </h1>
 
-            <p className="mt-5 text-lg text-ink/60">
-              {displayedPrice}
+            <div className="mt-7 flex items-center justify-between border-b border-ink/20 pb-7">
+              <p className="text-xl font-medium md:text-2xl">
+                {displayedPrice}
+              </p>
+
+              <span className="eyebrow text-ink/40">
+                Black / Relaxed Fit
+              </span>
+            </div>
+
+            {/* Short Description */}
+            <p className="max-w-lg py-7 text-base leading-relaxed text-ink/65 md:text-lg">
+              A relaxed-fit black hoodie featuring Red Door graphics on the
+              front and back. Made for wherever the music takes you.
             </p>
 
-            <div className="my-8 border-t border-ink/20" />
-
-            <p className="max-w-lg text-sm leading-relaxed text-ink/70 md:text-base">
-              {displayedDescription}
-            </p>
-
-            <div className="mt-10">
+            {/* Size Selection */}
+            <div className="border-t border-ink/20 pt-7">
               <div className="mb-4 flex items-center justify-between">
                 <label className="eyebrow">Select Size</label>
+
                 <button
                   type="button"
                   onClick={() => setShowSizeGuide(!showSizeGuide)}
-                  className="text-xs font-semibold underline underline-offset-4 hover:text-red"
+                  className="text-xs font-semibold underline underline-offset-4 transition-colors hover:text-red"
                   aria-expanded={showSizeGuide}
                 >
                   {showSizeGuide ? 'Close Size Guide' : 'Size Guide'}
                 </button>
               </div>
 
-              <div className="grid grid-cols-6 gap-2">
+              <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
                 {product.sizes.map((size) => {
                   const variant = findVariantBySize(size)
                   const unavailable =
@@ -253,13 +331,14 @@ export default function HoodieProductClient({ shopifyProduct }: Props) {
                       onClick={() => {
                         setSelectedSize(size)
                         setCartError('')
-                        setCartCheckoutUrl('')
+                        setAddedToCart(false)
                       }}
-                      className={`border py-3 text-sm font-semibold transition-colors ${
+                      disabled={unavailable}
+                      className={`relative border py-4 text-sm font-bold transition-colors ${
                         selectedSize === size
                           ? 'border-red bg-red text-cream'
                           : 'border-ink/20 hover:border-ink'
-                      } ${unavailable ? 'opacity-40' : ''}`}
+                      } ${unavailable ? 'cursor-not-allowed opacity-35' : ''}`}
                       aria-pressed={selectedSize === size}
                       title={unavailable ? 'Currently unavailable' : size}
                     >
@@ -312,22 +391,10 @@ export default function HoodieProductClient({ shopifyProduct }: Props) {
                     <h3 className="eyebrow mb-4">How to Measure</h3>
 
                     <div className="space-y-4 text-xs leading-relaxed text-ink/70">
-                      <p>
-                        <strong>Length:</strong> From where the shoulder seam
-                        meets the collar to the bottom hem.
-                      </p>
-                      <p>
-                        <strong>Shoulder:</strong> From one shoulder seam to
-                        the other.
-                      </p>
-                      <p>
-                        <strong>Chest:</strong> Across the garment just below
-                        the armpits, from one side to the other.
-                      </p>
-                      <p>
-                        <strong>Sleeve:</strong> From the shoulder seam to the
-                        cuff.
-                      </p>
+                      <p><strong>Length:</strong> From where the shoulder seam meets the collar to the bottom hem.</p>
+                      <p><strong>Shoulder:</strong> From one shoulder seam to the other.</p>
+                      <p><strong>Chest:</strong> Across the garment just below the armpits, from one side to the other.</p>
+                      <p><strong>Sleeve:</strong> From the shoulder seam to the cuff.</p>
                     </div>
 
                     <p className="mt-5 border-t border-ink/10 pt-4 text-xs leading-relaxed text-ink/50">
@@ -339,30 +406,26 @@ export default function HoodieProductClient({ shopifyProduct }: Props) {
               )}
             </div>
 
+            {/* Quantity */}
             <div className="mt-8">
               <label className="eyebrow mb-3 block">Quantity</label>
+
               <div className="flex w-36 items-center border border-ink/20">
                 <button
                   type="button"
-                  onClick={() =>
-                    setQuantity((current) => Math.max(1, current - 1))
-                  }
-                  className="flex-1 py-3 hover:bg-ink/5"
+                  onClick={() => setQuantity((current) => Math.max(1, current - 1))}
+                  className="flex-1 py-3 transition-colors hover:bg-ink/5"
                   aria-label="Decrease quantity"
                 >
                   −
                 </button>
 
-                <span className="w-12 text-center text-sm">
-                  {quantity}
-                </span>
+                <span className="w-12 text-center text-sm">{quantity}</span>
 
                 <button
                   type="button"
-                  onClick={() =>
-                    setQuantity((current) => Math.min(10, current + 1))
-                  }
-                  className="flex-1 py-3 hover:bg-ink/5"
+                  onClick={() => setQuantity((current) => Math.min(10, current + 1))}
+                  className="flex-1 py-3 transition-colors hover:bg-ink/5"
                   aria-label="Increase quantity"
                 >
                   +
@@ -370,32 +433,40 @@ export default function HoodieProductClient({ shopifyProduct }: Props) {
               </div>
             </div>
 
+            {/* Add to Cart */}
             <button
               type="button"
               onClick={handleCartAction}
               disabled={!canOrder || addingToCart}
-              className="mt-10 w-full border border-ink bg-ink px-6 py-5 text-xs font-bold uppercase tracking-[0.2em] text-cream transition-colors hover:border-red hover:bg-red disabled:border-ink/20 disabled:bg-ink/10 disabled:text-ink/40 disabled:hover:bg-ink/10"
+              className="mt-8 w-full bg-red px-6 py-5 text-xs font-bold uppercase tracking-[0.2em] text-cream transition-colors hover:bg-ink disabled:cursor-not-allowed disabled:bg-ink/15 disabled:text-ink/40"
             >
               {addingToCart
                 ? 'Adding to Cart...'
-                : cartCheckoutUrl
-                  ? 'Proceed to Checkout'
-                  : shopifyProduct
-                    ? selectedSize
-                      ? 'Add to Cart'
-                      : 'Select a Size'
-                    : 'Ordering Opens Soon'}
+                : shopifyProduct
+                  ? selectedSize
+                    ? 'Add to Cart'
+                    : 'Select a Size'
+                  : 'Ordering Opens Soon'}
             </button>
 
-            {cartError && (
-              <p className="mt-3 text-center text-xs text-red">
-                {cartError}
-              </p>
+            {addedToCart && (
+              <div className="mt-4 text-center text-sm">
+                <p className="text-green-700">Added to your cart.</p>
+                <Link
+                  href="/cart"
+                  className="mt-2 inline-block text-xs font-bold uppercase tracking-wider underline underline-offset-4 transition-colors hover:text-red"
+                >
+                  View Cart
+                </Link>
+              </div>
             )}
 
-            <p className="mt-4 text-center text-xs text-ink/50">
-              Orders will be fulfilled by Red Door through our merchandise
-              partner.
+            {cartError && (
+              <p className="mt-3 text-center text-xs text-red">{cartError}</p>
+            )}
+
+            <p className="mt-4 text-center text-xs leading-relaxed text-ink/45">
+              Orders are fulfilled by Red Door through our merchandise partner.
             </p>
           </div>
         </div>

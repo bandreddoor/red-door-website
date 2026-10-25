@@ -8,10 +8,31 @@ import { nav } from '@/content/site'
 export default function Nav() {
   const [open, setOpen] = useState(false)
   const [visible, setVisible] = useState(false)
+  const [hasScrolled, setHasScrolled] = useState(false)
 
   const navigation = (nav ?? []).filter(
     (item): item is NonNullable<typeof item> => item != null
   )
+
+  useEffect(() => {
+    const hero = document.getElementById('home')
+
+    if (!hero) {
+      setHasScrolled(window.scrollY > 0)
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setHasScrolled(!entry.isIntersecting)
+      },
+      { threshold: 0 }
+    )
+
+    observer.observe(hero)
+
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
@@ -39,50 +60,68 @@ export default function Nav() {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-ink/10 bg-cream/90 backdrop-blur">
+      <header
+        className={`fixed inset-x-0 top-0 z-50 border-b backdrop-blur-md transition-all duration-500 ease-out ${
+          hasScrolled
+            ? 'border-ink/10 bg-cream/90 text-ink'
+            : 'border-white/15 bg-black/20 text-cream'
+        }`}
+      >
         <nav
           aria-label="Primary"
           className="mx-auto flex h-16 max-w-[1600px] items-center justify-between px-5 md:px-10"
         >
-          {/* Red Door logo - always visible */}
+          {/* RD stamp logo */}
           <a
             href="#home"
             aria-label="Red Door, back to top"
             className="flex shrink-0 items-center"
           >
             <Image
-              src="/assets/logos/logo-primary-red.png"
+              src="/assets/logos/RDMainSticker.png"
               alt="Red Door"
-              width={72}
-              height={72}
+              width={1080}
+              height={1350}
               priority
-              className="h-14 w-14 object-contain"
+              className="h-20 w-auto object-contain"
             />
           </a>
 
           {/* Desktop navigation */}
-          <ul className="hidden gap-9 md:flex">
-            {navigation.map((n) => (
-              <li key={n.href}>
-                <a
-                  href={n.href}
-                  className="eyebrow transition-colors hover:text-red"
-                >
-                  {n.label}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div className="hidden items-center gap-8 md:flex">
+            <ul className="flex gap-9">
+              {navigation.map((n) => (
+                <li key={n.href}>
+                  <a
+                    href={n.href}
+                    className={`eyebrow transition-colors duration-300 ${
+                      hasScrolled
+                        ? 'hover:text-red'
+                        : 'text-cream hover:text-cream/65'
+                    }`}
+                  >
+                    {n.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
 
           {/* Mobile menu button */}
-          <button
-            className="eyebrow py-3 md:hidden"
-            aria-expanded={open}
-            aria-controls="menu"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? 'Close' : 'Menu'}
-          </button>
+          <div className="flex items-center md:hidden">
+            <button
+              className={`eyebrow py-3 transition-colors duration-300 ${
+                hasScrolled
+                  ? 'text-ink hover:text-red'
+                  : 'text-cream hover:text-cream/65'
+              }`}
+              aria-expanded={open}
+              aria-controls="menu"
+              onClick={() => setOpen(!open)}
+            >
+              {open ? 'Close' : 'Menu'}
+            </button>
+          </div>
         </nav>
       </header>
 
@@ -94,7 +133,6 @@ export default function Nav() {
           visible ? 'translate-x-0' : 'translate-x-full'
         } ${open ? 'pointer-events-auto' : 'pointer-events-none'}`}
       >
-        {/* Navigation links */}
         <ul>
           {navigation.map((n, index) => (
             <li

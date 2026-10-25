@@ -51,7 +51,7 @@ export type Show = {
   city: string
   state: string
   venue: string
-  ticketUrl: string
+  ticketUrl?: string
   eventType: 'public' | 'private'
   soldOut?: boolean
   placeholder?: boolean
@@ -78,7 +78,7 @@ export const merch = {
       name: 'Red Door Hoodie',
       category: 'Hoodies',
       price: '',
-      sizes: ['S', 'M', 'L', 'XL', 'XXL','3XL'],
+      sizes: ['S', 'M', 'L', 'XL', 'XXL', '3XL'],
       description: 'Black hoodie with cream Red Door logo detailing.',
       image: '/images/merch/red-door-hoodie-front.png',
       url: '/merch/red-door-hoodie',
@@ -97,12 +97,13 @@ export const merch = {
     {
       name: 'Red Door Crewneck',
       category: 'Crewnecks',
-      price: '',
-      sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-      description: 'Official Red Door Crewneck.',
-      image: '',
-      url: '/merch',
-      placeholder: true,
+      price: '$49.95',
+      sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'],
+      description:
+        'Black heavyweight crewneck featuring white embroidered Red Door lettering.',
+      image: '/images/merch/red-door-crew-front.png',
+      url: '/merch/red-door-embroidered-crewneck',
+      placeholder: false,
     },
     {
       name: 'Red Door Sticker Pack',

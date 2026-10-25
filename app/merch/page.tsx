@@ -1,89 +1,109 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { merch } from '@/content/site'
+
+function ExternalArrow() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="inline-block h-3.5 w-3.5"
+      aria-hidden="true"
+    >
+      <path d="M5 15 15 5" />
+      <path d="M6 5h9v9" />
+    </svg>
+  )
+}
 
 export default function MerchPage() {
-  const products = merch.products
-
   return (
-    <main className="min-h-screen bg-cream text-ink">
-      <div className="mx-auto max-w-7xl px-5 py-12 md:px-10 md:py-20">
-        <div className="mb-12 flex items-end justify-between border-b border-ink/20 pb-6">
-          <div>
-            <p className="eyebrow mb-3 text-red">Red Door — Official Store</p>
-            <h1 className="font-display text-6xl font-black uppercase tracking-tight md:text-8xl">
-              Merch
-            </h1>
-          </div>
+    <main className="flex min-h-screen flex-col overflow-hidden bg-cream text-ink">
+      <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 md:px-10 md:py-6">
+        <Link href="/" aria-label="Back to Red Door home">
+          <Image
+            src="/assets/logos/logo-primary-red.png"
+            alt="Red Door"
+            width={140}
+            height={140}
+            priority
+            className="h-20 w-20 object-contain md:h-24 md:w-24"
+          />
+        </Link>
 
-          <Link
-            href="/"
-            className="eyebrow mb-2 text-ink/60 transition-colors hover:text-red"
-          >
-            Back to Home ↗
-          </Link>
-        </div>
+        <Link
+          href="/"
+          className="eyebrow inline-flex items-center gap-1.5 transition-colors hover:text-red"
+        >
+          Back to Home <ExternalArrow />
+        </Link>
+      </header>
 
-        <p className="mb-12 max-w-xl text-sm leading-relaxed text-ink/70 md:text-base">
-          Official Red Door merchandise. The first collection is coming soon.
+      <section className="flex flex-1 flex-col items-center justify-center px-5 py-20 text-center md:px-10">
+        <p className="eyebrow mb-6 text-red">
+          Red Door — Official Merchandise
         </p>
 
-        <div className="grid grid-cols-2 gap-x-4 gap-y-12 md:grid-cols-3 md:gap-x-6">
-          {products.map((product) => (
-            <Link
-              key={product.name}
-              href={product.url}
-              className="group block"
+        <Image
+          src="/assets/logos/logo-sticker.png"
+          alt="Red Door"
+          width={220}
+          height={220}
+          className="mb-10 h-36 w-36 object-contain md:h-48 md:w-48"
+          priority
+        />
+
+        <h1 className="font-display text-6xl font-black uppercase leading-[0.85] tracking-[-0.07em] md:text-8xl lg:text-9xl">
+          Coming
+          <br />
+          Soon<span className="text-red">.</span>
+        </h1>
+
+        <p className="mt-7 max-w-sm text-sm leading-6 text-ink/60 md:text-base">
+          We’re working on something. The first Red Door collection is on its
+          way.
+        </p>
+
+        <Link
+          href="/"
+          className="eyebrow mt-10 border-b border-ink/30 pb-1 transition-colors hover:border-red hover:text-red"
+        >
+          Return to Red Door
+        </Link>
+      </section>
+
+      <footer className="border-t border-ink/20">
+        <div className="mx-auto flex max-w-7xl flex-col items-center px-5 py-8 text-center md:px-10">
+          <p className="eyebrow text-ink/45">
+            Starkville, Mississippi
+          </p>
+
+          <div className="mt-4 flex gap-8">
+            <a
+              href="https://www.instagram.com/reddoorband/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="eyebrow inline-flex items-center gap-1.5 transition-colors hover:text-red"
             >
-              <div className="relative aspect-[4/5] overflow-hidden transition-transform duration-500 ease-out group-hover:-rotate-2 group-hover:scale-[1.04]">
-                {product.image ? (
-                  <>
-                    <Image
-                      src={product.image}
-                      alt={`${product.name} front`}
-                      fill
-                      sizes="(min-width: 768px) 33vw, 50vw"
-                      className={`object-contain transition-opacity duration-500 ${
-                        product.name === 'Red Door Hoodie'
-                          ? 'opacity-100 group-hover:opacity-0'
-                          : ''
-                      }`}
-                    />
+              Instagram <ExternalArrow />
+            </a>
 
-                    {product.name === 'Red Door Hoodie' && (
-                      <Image
-                        src="/images/merch/red-door-hoodie-back.png"
-                        alt={`${product.name} back`}
-                        fill
-                        sizes="(min-width: 768px) 33vw, 50vw"
-                        className="object-contain opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                      />
-                    )}
-                  </>
-                ) : (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-                    <span className="font-display text-2xl font-black uppercase tracking-tight text-ink/30">
-                      Red Door
-                    </span>
-                    <span className="eyebrow text-ink/40">
-                      {product.category}
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              <h2 className="mt-4 font-display text-xl font-extrabold uppercase tracking-tight transition-colors group-hover:text-red md:text-2xl">
-                {product.name}
-              </h2>
-
-              <p className="eyebrow mt-1 text-ink/50">
-                {product.placeholder ? 'Coming Soon' : product.price || 'Coming Soon'}
-              </p>
-            </Link>
-          ))}
+            <a
+              href="https://www.tiktok.com/@reddoorband"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="eyebrow inline-flex items-center gap-1.5 transition-colors hover:text-red"
+            >
+              TikTok <ExternalArrow />
+            </a>
+          </div>
         </div>
-      </div>
+      </footer>
     </main>
   )
 }

@@ -1,7 +1,6 @@
 
-import Section from './Section'
-import Reveal from './Reveal'
 import ExtLink from './ExtLink'
+import Reveal from './Reveal'
 import { shows } from '@/content/site'
 
 const parse = (d: string) => {
@@ -27,85 +26,101 @@ export default function Shows() {
     )
 
   return (
-    <Section id="shows" title="Shows">
-      {list.length === 0 ? (
-        <Reveal>
-          <p className="font-display text-4xl font-extrabold uppercase tracking-tight md:text-5xl">
-            New dates coming soon.
-          </p>
-        </Reveal>
-      ) : (
-        <Reveal>
-          <ol className="border-t border-ink">
-            {list.map((s) => {
-              const d = parse(s.date)
+    <section
+      id="shows"
+      aria-labelledby="shows-h"
+      className="px-5 py-16 md:px-10 md:py-24"
+    >
+      <div className="mx-auto grid max-w-[1600px] gap-10 md:grid-cols-[0.85fr_2fr] md:gap-12 lg:gap-20">
 
-              return (
-                <li
-                  key={s.date + s.venue}
-                  className="flex flex-col gap-3 border-b border-ink py-8 transition-colors hover:text-red sm:grid sm:grid-cols-[9rem_1fr_1.4fr_9rem] sm:items-center sm:gap-8 md:py-10"
-                >
-                  {/* Date */}
-                  <time
-                    dateTime={s.date}
-                    className="font-display text-5xl font-black uppercase leading-none tracking-tighter md:text-6xl"
-                  >
-                    {d.toLocaleDateString('en-US', {
-                      month: 'short',
-                    })}{' '}
-                    {String(d.getDate()).padStart(2, '0')}
-                  </time>
+        {/* Sticky Shows Heading */}
+        <div className="md:sticky md:top-24 md:self-start">
+          <h2 id="shows-h" className="h-section">
+            Shows
+          </h2>
+        </div>
 
-                  {/* Location */}
-                  <span className="text-2xl font-bold uppercase tracking-wide">
-                    {s.city}, {s.state}
-                  </span>
+        {/* Show List */}
+        <div>
+          {list.length === 0 ? (
+            <Reveal>
+              <p className="font-display text-4xl font-extrabold uppercase tracking-tight md:text-5xl">
+                New dates coming soon.
+              </p>
+            </Reveal>
+          ) : (
+            <Reveal>
+              <ol className="space-y-10 md:space-y-12">
+                {list.map((s, index) => {
+                  const d = parse(s.date)
 
-                  {/* Venue and event type */}
-                  <div>
-                    <p className="text-2xl font-medium uppercase tracking-wide">
-                      {s.venue}
-                    </p>
-
-                    <p className="eyebrow mt-2 text-ink/50">
-                      {s.eventType === 'private'
-                        ? 'Private Event'
-                        : 'Public Show'}
-                    </p>
-
-                    {s.placeholder && (
-                      <span className="eyebrow mt-2 inline-block border border-red px-2 py-0.5 text-red">
-                        Sample
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Tickets / Status */}
-                  <div className="mt-2 sm:mt-0 sm:justify-self-end">
-                    {s.soldOut ? (
-                      <span className="eyebrow text-ink/50">
-                        Sold Out
-                      </span>
-                   ) : s.eventType === 'private' ? null : s.ticketUrl ? (
-                      <ExtLink
-                        href={s.ticketUrl}
-                        className="btn text-ink"
+                  return (
+                    <li
+                      key={`${s.date}-${s.venue}-${index}`}
+                      className="grid grid-cols-[5.5rem_1fr] items-center gap-x-5 gap-y-3 sm:grid-cols-[6.5rem_1fr_auto] sm:gap-x-8"
+                    >
+                      {/* Date */}
+                      <time
+                        dateTime={s.date}
+                        className="row-span-2 font-display text-4xl font-black uppercase leading-none tracking-tighter text-red md:text-5xl"
                       >
-                        Tickets ↗
-                      </ExtLink>
-                    ) : (
-                      <span className="eyebrow text-ink/50">
-                        Details Soon
-                      </span>
-                    )}
-                  </div>
-                </li>
-              )
-            })}
-          </ol>
-        </Reveal>
-      )}
+                        <span className="block">
+                          {d.toLocaleDateString('en-US', {
+                            month: 'short',
+                          })}
+                        </span>
+                        <span className="block">
+                          {String(d.getDate()).padStart(2, '0')}
+                        </span>
+                      </time>
 
-    </Section>
+                      {/* Show Details */}
+                      <div>
+                        <p className="text-xl font-bold uppercase tracking-wide md:text-2xl">
+                          {s.city}, {s.state}
+                        </p>
+
+                        <p className="mt-1 text-sm font-medium uppercase tracking-[0.12em] text-ink/55">
+                          {s.venue}
+                        </p>
+
+                        <p className="eyebrow mt-2 text-ink/40">
+                          {s.eventType === 'private'
+                            ? 'Private Event'
+                            : 'Public Show'}
+                          {s.soldOut && ' · Sold Out'}
+                        </p>
+
+                        {s.placeholder && (
+                          <span className="eyebrow mt-2 inline-block text-red">
+                            Sample
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Tickets */}
+                      <div className="col-start-2 sm:col-start-3 sm:row-start-1">
+                        {s.soldOut ? (
+                          <span className="eyebrow text-ink/50">
+                            Sold Out
+                          </span>
+                        ) : s.eventType === 'public' && s.ticketUrl ? (
+                          <ExtLink
+                            href={s.ticketUrl}
+                            className="eyebrow font-bold text-red transition-opacity hover:opacity-60"
+                          >
+                            Tickets ↗
+                          </ExtLink>
+                        ) : null}
+                      </div>
+                    </li>
+                  )
+                })}
+              </ol>
+            </Reveal>
+          )}
+        </div>
+      </div>
+    </section>
   )
 }

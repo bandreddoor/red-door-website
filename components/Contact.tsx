@@ -1,3 +1,4 @@
+
 import Section from './Section'
 import Reveal from './Reveal'
 import ExtLink from './ExtLink'
@@ -5,9 +6,10 @@ import { contact, social } from '@/content/site'
 
 export default function Contact() {
   const rows = [
-    ['General', contact.general, contact.general ? `mailto:${contact.general}` : '', 'BANDREDDOOR@GMAIL.COM'],
-    ['Instagram', '@REDDOORBAND', social.instagram, '@REDDOORBAND'],
-    ['TikTok', '@REDDOORBAND', social.tiktok, '@REDDOORBAND'],
+    ['Booking', 'HUNTER@BEATLINEPD.COM', 'mailto:hunter@beatlinepd.com'],
+    ['General', contact.general, contact.general ? `mailto:${contact.general}` : ''],
+    ['Instagram', '@REDDOORBAND', social.instagram],
+    ['TikTok', '@REDDOORBAND', social.tiktok],
   ]
 
   return (
@@ -15,7 +17,7 @@ export default function Contact() {
       <Reveal className="grid gap-12 md:grid-cols-12 md:gap-16">
         <div className="md:col-span-5">
           <p className="max-w-sm text-lg leading-relaxed">
-            For general questions and everything else, reach out or find us on social.
+            For booking inquiries, general questions, and everything else, reach out or find us on social.
           </p>
         </div>
         <dl className="border-t border-cream/60 md:col-span-7">

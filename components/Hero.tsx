@@ -1,59 +1,68 @@
 
 import Image from 'next/image'
-import { site } from '@/content/site'
 
 export default function Hero() {
   return (
     <section
       id="home"
-      className="relative flex min-h-svh flex-col items-center justify-end overflow-hidden"
+      className="relative isolate h-screen min-h-screen w-full shrink-0 overflow-hidden"
+      style={{
+        height: '100dvh',
+        minHeight: '100dvh',
+      }}
     >
-      {/* Full-screen band photograph */}
-      <div
+      {/* Desktop background video */}
+      <video
         aria-hidden="true"
-        className="absolute inset-0 bg-cover bg-center md:bg-cover"
-        style={{
-          backgroundImage: "url('/images/band-photo.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center 35%',
-          backgroundRepeat: 'no-repeat',
-        }}
-      />
-
-      {/* Dark overlays */}
-      <div className="absolute inset-0 bg-black/20" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/10" />
-
-      {/* Centered Red Door logo */}
-      <div className="absolute left-1/2 top-[5%] z-10 -translate-x-1/2 md:top-[0%]">
-        <Image
-          src="/assets/logos/logo-sticker.png"
-          alt="Red Door"
-          width={280}
-          height={280}
-          className="logo-reveal h-auto w-[75vw] max-w-[420px] object-contain md:w-[34vw] md:max-w-[500px]"
-          priority
-        />
-      </div>
-
-      {/* Tagline */}
-      <div className="relative z-10 mb-16 px-6 text-center">
-        <p className="text-sm font-medium tracking-[0.2em] uppercase text-white">
-          {site.tagline}
-        </p>
-      </div>
-
-      {/* Scroll cue */}
-      <a
-        href="#shows"
-        aria-label="Scroll to shows"
-        className="relative z-10 mb-8 flex flex-col items-center gap-2 text-white/90 transition-opacity hover:opacity-60"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        className="absolute inset-0 hidden h-full w-full object-cover md:block"
       >
-        <span className="text-xs tracking-[0.2em] uppercase">
-          SCROLL
-        </span>
-        <span className="h-8 w-px bg-white/80" />
-      </a>
+        <source src="/videos/RDHoriz.mp4" type="video/mp4" />
+      </video>
+
+      {/* Mobile background video */}
+      <video
+        aria-hidden="true"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+        className="absolute inset-0 h-full w-full object-cover md:hidden"
+      >
+        <source src="/videos/RDVert.mp4" type="video/mp4" />
+      </video>
+
+      {/* Subtle bottom gradient */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+
+      {/* Bottom branding row */}
+      <div className="absolute inset-x-0 bottom-0 z-10 flex items-center justify-between px-6 pb-8 md:px-14 md:pb-10 lg:px-16">
+        {/* Location */}
+        <p className="translate-y-3 text-sm font-black tracking-[0.22em] uppercase text-white md:translate-y-8 md:text-xl md:font-extrabold md:tracking-[0.24em] lg:text-2xl">
+          STARKVILLE, MS
+        </p>
+
+        {/* Sticker logo */}
+        <a
+          href="#home"
+          aria-label="Red Door, back to top"
+          className="shrink-0 transition-opacity hover:opacity-80"
+        >
+          <Image
+            src="/assets/logos/logo-sticker.png"
+            alt="Red Door"
+            width={300}
+            height={300}
+            priority
+            className="h-auto w-36 object-contain md:w-48 lg:w-52"
+          />
+        </a>
+      </div>
     </section>
   )
 }

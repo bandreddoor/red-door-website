@@ -1,17 +1,13 @@
 
-import { getShopifyProduct } from '@/lib/shopify-products'
-import HoodieProductClient from './HoodieProductClient'
+import { notFound } from 'next/navigation'
 
-export const dynamic = 'force-dynamic'
+// Change to true when the merch store is ready to launch.
+const MERCH_ENABLED = false
 
-export default async function HoodiePage() {
-  let shopifyProduct = null
-
-  try {
-    shopifyProduct = await getShopifyProduct('red-door-hoodie')
-  } catch (error) {
-    console.error('Unable to load Red Door Hoodie from Shopify:', error)
+export default function HoodiePage() {
+  if (!MERCH_ENABLED) {
+    notFound()
   }
 
-  return <HoodieProductClient shopifyProduct={shopifyProduct} />
+  return null
 }

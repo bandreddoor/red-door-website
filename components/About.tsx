@@ -1,3 +1,4 @@
+
 'use client'
 
 import Image from 'next/image'
@@ -49,7 +50,7 @@ function Member({ name, role, index }: {
 
 export default function About() {
   return (
-    <Section id="about" title="About">
+    <Section id="about" title="About" className="-mt-10 md:-mt-16">
       <Reveal className="grid gap-12 md:grid-cols-12 md:gap-16">
         <div className="relative aspect-[4/5] border border-ink/15 bg-ink/[0.04] md:col-span-5">
           {about.photo
