@@ -10,6 +10,8 @@ export function middleware(request: NextRequest) {
     (hostname === 'reddoorband.com' ||
       hostname === 'www.reddoorband.com') &&
     pathname !== '/' &&
+    pathname !== '/live' &&
+    pathname !== '/live/' &&
     !pathname.startsWith('/videos/')
   ) {
     return NextResponse.redirect(new URL('/', request.url))
