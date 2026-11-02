@@ -1,5 +1,7 @@
+
 import type { Metadata, Viewport } from 'next'
 import { Archivo, Inter } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { site, social, about } from '@/content/site'
 import { CartProvider } from '@/components/CartProvider'
@@ -88,6 +90,8 @@ export default function RootLayout({
         </a>
 
         <CartProvider>{children}</CartProvider>
+
+        <Analytics />
 
         <script
           type="application/ld+json"
