@@ -1,8 +1,7 @@
 
+import Link from 'next/link'
 import Section from './Section'
 import Reveal from './Reveal'
-import ExtLink from './ExtLink'
-import { contact } from '@/content/site'
 
 const eventTypes = [
   'College events & Greek Life',
@@ -11,10 +10,6 @@ const eventTypes = [
 ]
 
 export default function Booking() {
-  const href = contact.booking
-    ? `mailto:${contact.booking}?subject=${encodeURIComponent(contact.bookingSubject)}`
-    : ''
-
   return (
     <Section id="booking" title="Booking" className="bg-red text-cream on-red">
       <Reveal className="grid gap-12 md:grid-cols-12 md:items-end md:gap-16">
@@ -29,11 +24,11 @@ export default function Booking() {
             For booking inquiries, availability, and event details, get in touch with our booking team.
           </p>
 
-          <ExtLink
-            href={href}
+          <Link
+            href="/booking"
             className="btn mt-8 inline-flex items-center gap-3 border-cream text-cream hover:border-cream hover:bg-cream hover:text-red"
           >
-            Contact Booking
+            Submit a Booking Inquiry
 
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -49,7 +44,7 @@ export default function Booking() {
               <path d="M5 15 15 5" />
               <path d="M6 5h9v9" />
             </svg>
-          </ExtLink>
+          </Link>
         </div>
 
         <div className="border-t border-cream/40 pt-5 md:col-span-5 md:border-t-0 md:border-l md:pl-10">

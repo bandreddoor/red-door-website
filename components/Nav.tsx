@@ -1,4 +1,3 @@
-
 'use client'
 
 import Image from 'next/image'
@@ -13,6 +12,39 @@ export default function Nav() {
   const navigation = (nav ?? []).filter(
     (item): item is NonNullable<typeof item> => item != null
   )
+
+  const merchLink = { label: 'Merch', href: '/merch' }
+  const bookingLink = { label: 'Booking', href: '/booking' }
+
+  const homeLinks = navigation.filter(
+    (item) =>
+      item.href !== '/merch' &&
+      item.href !== '/booking' &&
+      item.label === 'Home'
+  )
+
+  const showsLinks = navigation.filter(
+    (item) =>
+      item.href !== '/merch' &&
+      item.href !== '/booking' &&
+      item.label === 'Shows'
+  )
+
+  const otherLinks = navigation.filter(
+    (item) =>
+      item.href !== '/merch' &&
+      item.href !== '/booking' &&
+      item.label !== 'Home' &&
+      item.label !== 'Shows'
+  )
+
+  const links = [
+    ...homeLinks,
+    merchLink,
+    ...showsLinks,
+    bookingLink,
+    ...otherLinks,
+  ]
 
   useEffect(() => {
     const hero = document.getElementById('home')
@@ -71,7 +103,6 @@ export default function Nav() {
           aria-label="Primary"
           className="mx-auto flex h-16 max-w-[1600px] items-center justify-between px-5 md:px-10"
         >
-          {/* RD stamp logo */}
           <a
             href="#home"
             aria-label="Red Door, back to top"
@@ -87,10 +118,9 @@ export default function Nav() {
             />
           </a>
 
-          {/* Desktop navigation */}
           <div className="hidden items-center gap-8 md:flex">
             <ul className="flex gap-9">
-              {navigation.map((n) => (
+              {links.map((n) => (
                 <li key={n.href}>
                   <a
                     href={n.href}
@@ -107,8 +137,7 @@ export default function Nav() {
             </ul>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="flex items-center md:hidden">
+          <div className="md:hidden">
             <button
               className={`eyebrow py-3 transition-colors duration-300 ${
                 hasScrolled
@@ -125,16 +154,15 @@ export default function Nav() {
         </nav>
       </header>
 
-      {/* Mobile menu */}
       <div
         id="menu"
         aria-hidden={!open}
-        className={`fixed inset-0 z-40 flex flex-col bg-cream px-5 pb-8 pt-28 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:hidden ${
+        className={`fixed inset-0 z-[49] flex flex-col bg-cream px-5 pb-8 pt-28 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:hidden ${
           visible ? 'translate-x-0' : 'translate-x-full'
         } ${open ? 'pointer-events-auto' : 'pointer-events-none'}`}
       >
         <ul>
-          {navigation.map((n, index) => (
+          {links.map((n, index) => (
             <li
               key={n.href}
               className="transition-all duration-500 ease-out"
@@ -156,7 +184,6 @@ export default function Nav() {
           ))}
         </ul>
 
-        {/* Bottom branding */}
         <div
           className="mt-auto flex flex-col items-center text-center transition-all duration-700"
           style={{

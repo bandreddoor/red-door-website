@@ -1,131 +1,38 @@
-
-import Image from 'next/image'
-import Link from 'next/link'
-import { merch } from '@/content/site'
-
-// Change this to true when you're ready to bring merch back.
-const SHOW_MERCH = false
-
-const productTilts = [-9, 7, -6, 10, -8, 6]
-
-function ExternalArrow() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 20 20"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="inline-block h-3.5 w-3.5"
-      aria-hidden="true"
-    >
-      <path d="M5 15 15 5" />
-      <path d="M6 5h9v9" />
-    </svg>
-  )
-}
-
-const productBackImages: Record<string, string> = {
-  'Red Door Hoodie': '/images/merch/red-door-hoodie-back.png',
-  'Red Door Crewneck': '/images/merch/red-door-crew-back.png',
-}
-
 export default function Merch() {
-  if (!SHOW_MERCH) return null
-
-  const products = merch.products
-  const repeatedProducts = Array.from({ length: 4 }, () => products).flat()
-
   return (
     <section
       id="merch"
-      className="overflow-hidden border-y border-ink/20 bg-cream py-12 md:py-10"
+      className="border-y border-ink/20 bg-cream py-12 md:py-16 lg:py-20"
     >
-      <div className="mx-auto grid max-w-[1600px] gap-8 px-5 md:grid-cols-[0.7fr_2.3fr] md:items-center md:gap-10 md:px-10">
-        <Link href="/merch" className="group block">
-          <p className="eyebrow mb-3 text-red">
+      <div className="mx-auto grid max-w-[1600px] grid-cols-1 items-center gap-8 px-6 md:grid-cols-[1.1fr_0.9fr] md:gap-10 md:px-12 lg:gap-12 lg:px-16">
+        {/* Left column */}
+        <div className="flex min-w-0 items-center md:min-h-[320px] md:border-r md:border-ink/20 md:pr-8 lg:pr-12">
+          <h2 className="whitespace-nowrap font-display text-7xl font-black uppercase leading-[0.8] tracking-tighter sm:text-8xl md:text-[9rem] lg:text-[10rem] xl:text-[10rem]">
+            Merch<span className="text-red">.</span>
+          </h2>
+        </div>
+
+        {/* Right column */}
+        <div className="flex min-w-0 flex-col justify-center py-2 md:py-4">
+          <p className="eyebrow mb-6 text-red md:mb-7">
             Official Red Door Store
           </p>
 
-          <h2 className="font-display text-6xl font-black uppercase leading-[0.85] tracking-tight md:text-8xl lg:text-9xl">
-            Merch
-          </h2>
-
-          <p className="eyebrow mt-5 inline-flex items-center gap-1.5 text-ink/50 transition-colors group-hover:text-red">
-            Explore the collection <ExternalArrow />
+          <p className="eyebrow mb-3 text-ink/50">
+            The first collection
           </p>
-        </Link>
 
-        <div className="merch-marquee min-w-0">
-          <div
-            className="merch-marquee-track"
-            style={{ animationDuration: '23s' }}
-          >
-            {repeatedProducts.map((p, index) => {
-              const productIndex = index % Math.max(products.length, 1)
-              const tilt = productTilts[index % productTilts.length]
-              const revealDelay = Math.min(productIndex * 65, 700)
-              const backImage = productBackImages[p.name]
+          <h3 className="font-display text-6xl font-black uppercase leading-[0.82] tracking-tighter sm:text-7xl lg:text-8xl">
+            Coming
+            <br />
+            <span className="text-red">Soon.</span>
+          </h3>
 
-              return (
-                <Link
-                  href={p.url}
-                  key={`${p.name}-${index}`}
-                  className="merch-product-reveal group w-[270px] shrink-0 text-center md:w-[360px] lg:w-[390px]"
-                  style={{
-                    '--product-tilt': `${tilt}deg`,
-                    animationDelay: `${revealDelay}ms`,
-                  } as React.CSSProperties}
-                  aria-hidden={index >= products.length}
-                  tabIndex={index >= products.length ? -1 : 0}
-                >
-                  <div className="relative aspect-[4/5] overflow-hidden transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] [transform:rotate(var(--product-tilt))] group-hover:!rotate-0 group-hover:scale-[1.08]">
-                    {p.image ? (
-                      <>
-                        <Image
-                          src={p.image}
-                          alt={`${p.name} front`}
-                          fill
-                          sizes="390px"
-                          className={`object-contain transition-opacity duration-500 ${
-                            backImage
-                              ? 'opacity-100 group-hover:opacity-0'
-                              : 'transition-transform duration-700 group-hover:scale-[1.04]'
-                          }`}
-                        />
-
-                        {backImage && (
-                          <Image
-                            src={backImage}
-                            alt={`${p.name} back`}
-                            fill
-                            sizes="390px"
-                            className="object-contain opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                          />
-                        )}
-                      </>
-                    ) : (
-                      <div className="flex h-full items-center justify-center">
-                        <span className="font-display text-3xl font-black uppercase tracking-tight text-ink/20 transition-colors group-hover:text-red/60">
-                          {p.category}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  <h3 className="mt-3 text-center font-display text-lg font-extrabold uppercase tracking-tight">
-                    {p.name}
-                  </h3>
-
-                  <p className="eyebrow mt-1 text-center text-ink/50">
-                    {p.placeholder ? 'Coming Soon' : p.price || 'Coming Soon'}
-                  </p>
-                </Link>
-              )
-            })}
-          </div>
+          <p className="mt-5 max-w-md text-sm leading-relaxed text-ink/60 md:mt-6 md:text-base">
+            We're putting together the first batch of Red Door
+            gear. Shirts, sweatshirts, and more. It'll be worth
+            the wait.
+          </p>
         </div>
       </div>
     </section>

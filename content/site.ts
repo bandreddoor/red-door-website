@@ -125,10 +125,10 @@ export const about = {
   ],
   photo: '/images/band-about.JPG',
   members: [
-    { name: 'Michael', role: 'Lead Vocals & Guitar' },
-    { name: 'Patrick', role: 'Guitar' },
     { name: 'Nick', role: 'Bass' },
+    { name: 'Patrick', role: 'Guitar' },
     { name: 'Keygan', role: 'Drums' },
+    { name: 'Michael', role: 'Lead Vocals & Guitar' },
   ],
 }
 

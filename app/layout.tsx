@@ -1,4 +1,3 @@
-
 import type { Metadata, Viewport } from 'next'
 import { Archivo, Inter } from 'next/font/google'
 import './globals.css'
@@ -80,7 +79,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>
-      <body>
+      <body suppressHydrationWarning>
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:bg-white focus:px-4 focus:py-2 focus:text-black"
