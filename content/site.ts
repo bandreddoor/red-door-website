@@ -71,7 +71,7 @@ export const shows: Show[] = [
     city: 'Auburn',
     state: 'AL',
     venue: 'Delta Chi',
-    eventType: 'Public Show',
+    eventType: 'public',
     ticketUrl: '',
   }
 ]
