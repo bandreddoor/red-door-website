@@ -57,7 +57,24 @@ export type Show = {
   placeholder?: boolean
 }
 
-export const shows: Show[] = []
+export const shows: Show[] = [
+  {
+    date: '2026-11-12',
+    city: 'Starkville',
+    state: 'MS',
+    venue: 'Mississippi Ice',
+    eventType: 'public',
+    ticketUrl: '',
+  },
+
+  {date: '2027-01-16',
+    city: 'Auburn',
+    state: 'AL',
+    venue: 'Delta Chi',
+    eventType: 'Public Show',
+    ticketUrl: '',
+  }
+]
 
 export type Product = {
   name: string
