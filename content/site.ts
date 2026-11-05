@@ -67,13 +67,6 @@ export const shows: Show[] = [
     ticketUrl: '',
   },
 
-  {date: '2027-01-16',
-    city: 'Auburn',
-    state: 'AL',
-    venue: 'Delta Chi',
-    eventType: 'public',
-    ticketUrl: '',
-  }
 ]
 
 export type Product = {

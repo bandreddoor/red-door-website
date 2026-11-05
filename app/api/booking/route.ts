@@ -134,6 +134,8 @@ export async function POST(request: Request) {
         'hunter@beatlinepd.com',
         'bandreddoor@gmail.com',
         'ammonskk@gmail.com',
+        'luke@beatlinepd.com',
+        'patrick@beatlinepd.com',
       ],
       replyTo: values.email,
       subject: `New Red Door Booking Inquiry — ${values.organization || values.name}`,
