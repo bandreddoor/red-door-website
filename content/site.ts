@@ -63,7 +63,7 @@ export const shows: Show[] = [
     city: 'Starkville',
     state: 'MS',
     venue: 'Mississippi Ice',
-    eventType: 'public',
+    eventType: 'private',
     ticketUrl: '',
   },
 
@@ -146,10 +146,10 @@ export const about = {
   ],
   photo: '/images/band-about.JPG',
   members: [
-    { name: 'Nick', role: 'Bass' },
-    { name: 'Patrick', role: 'Guitar' },
-    { name: 'Keygan', role: 'Drums' },
     { name: 'Michael', role: 'Lead Vocals & Guitar' },
+    { name: 'Patrick', role: 'Guitar' },
+    { name: 'Nick', role: 'Bass' },
+    { name: 'Keygan', role: 'Drums' },
   ],
 }
 
