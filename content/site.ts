@@ -67,6 +67,17 @@ export const shows: Show[] = [
     ticketUrl: '',
   },
 
+  {
+    date: '2026-11-21',
+    city: 'Starkville',
+    state: 'MS',
+    venue: 'Daves Dark Horse Tavern',
+    eventType: 'public',
+    ticketUrl: '',
+  },
+
+  
+
 ]
 
 export type Product = {
